@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sujan Doshi | Founder & CEO</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Outfit:wght@200;300;400;500;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- GSAP & Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -186,23 +182,18 @@
 </head>
 <body class="antialiased">
 
-    <!-- Noise -->
     <div class="noise-overlay"></div>
 
-    <!-- Cursor -->
     <div id="cursor-dot" class="cursor-dot hidden md:block"></div>
     <div id="cursor-ring" class="cursor-ring hidden md:block"></div>
 
-    <!-- WebGL Background -->
     <canvas id="webgl-container"></canvas>
 
-    <!-- Preloader -->
     <div id="loader">
         <div class="loader-text">SUJAN DOSHI</div>
         <div class="mt-4 text-xs font-sans tracking-widest text-gray-500">DIGITAL FLAGSHIP</div>
     </div>
 
-    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 px-6 py-6 md:px-12 md:py-8 flex justify-between items-center mix-blend-difference">
         <a href="#" class="text-xl font-display tracking-widest text-white hover-trigger">SD.</a>
         <div class="hidden md:flex gap-10 text-[11px] tracking-[0.2em] font-medium text-gray-400">
@@ -217,7 +208,6 @@
         <button class="md:hidden text-white text-xl hover-trigger" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="fixed inset-0 bg-brand-dark/95 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center">
         <div class="flex flex-col gap-8 text-center">
             <a href="#about" onclick="toggleMobileMenu()" class="text-2xl font-display text-white hover:text-brand-accent transition">PROFILE</a>
@@ -228,15 +218,11 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <main>
 
-        <!-- HERO SECTION (Portal) -->
-        <!-- Fixed padding: pt-32 on mobile, pt-40 on desktop to prevent overlap -->
         <section id="hero" class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
             <div class="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center h-full pt-[100px] md:pt-32 pb-20">
                 
-                <!-- Left: Typography & Intro -->
                 <div class="md:col-span-7 relative z-20 order-2 md:order-1">
                     <div class="overflow-hidden mb-4">
                         <span class="inline-block text-brand-accent text-xs tracking-[0.3em] uppercase hero-anim opacity-0 translate-y-10">
@@ -249,7 +235,6 @@
                         <span class="block overflow-hidden"><span class="hero-anim block translate-y-full text-stroke">DOSHI</span></span>
                     </h1>
                     
-                    <!-- Updated Subtext with Accent Color -->
                     <p class="font-sans font-light text-gray-400 text-sm md:text-lg max-w-md leading-relaxed mb-10 hero-anim opacity-0 translate-y-10 border-l border-brand-accent pl-6">
                         Building enduring consumer brands through clarity, consistency, and trust. Redefining the intersection of luxury and accessibility.
                     </p>
@@ -265,23 +250,18 @@
                     </div>
                 </div>
 
-                <!-- Right: Profile Portrait (Portal) -->
                 <div class="md:col-span-5 relative h-[50vh] md:h-[70vh] w-full flex justify-center items-center order-1 md:order-2 hero-image-anim opacity-0 scale-95">
                     <div class="relative w-full h-full max-w-sm">
-                        <!-- Orbiting Rings (CSS Animation) -->
                         <div class="absolute inset-0 rounded-full border border-brand-accent/20 animate-[spin_10s_linear_infinite]"></div>
                         <div class="absolute -inset-4 rounded-full border border-white/5 animate-[spin_15s_linear_infinite_reverse]"></div>
 
-                        <!-- Main Image -->
                         <div class="absolute inset-0 rounded-[10rem] overflow-hidden glass-panel border border-white/10 group">
-                             <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/sujan_4.jpeg" 
+                             <img src="sujan_4.jpeg" 
                                   alt="Sujan Doshi" 
                                   class="w-full h-full object-cover transition duration-1000 group-hover:scale-105 filter contrast-110">
                              
-                             <!-- Gradient Overlay -->
                              <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent"></div>
                              
-                             <!-- Floating Name Tag -->
                              <div class="absolute bottom-8 left-0 w-full text-center">
                                  <span class="font-display text-white text-2xl tracking-widest drop-shadow-lg">SD</span>
                              </div>
@@ -293,10 +273,8 @@
             
         </section>
 
-        <!-- ABOUT SECTION -->
         <section id="about" class="py-32 px-6 relative z-10 bg-brand-dark">
             <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <!-- Text -->
                 <div class="order-2 lg:order-1">
                     <span class="text-brand-accent text-xs tracking-[0.3em] uppercase block mb-6 scroll-reveal">The Vision</span>
                     <h2 class="font-serif text-4xl md:text-5xl text-white mb-10 leading-tight scroll-reveal">
@@ -313,11 +291,10 @@
                     </div>
                 </div>
 
-                <!-- Stats / Image -->
                 <div class="order-1 lg:order-2 grid grid-cols-2 gap-4 h-min self-center scroll-reveal">
                     <div class="space-y-4 mt-12">
                         <div class="aspect-[3/4] overflow-hidden glass-card">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/sujan_1.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
+                            <img src="sujan_1.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
                         </div>
                         <div class="p-6 glass-card text-center">
                             <span class="font-display text-3xl text-brand-accent">10+</span>
@@ -330,14 +307,13 @@
                             <span class="block text-[10px] text-gray-500 tracking-widest uppercase mt-2">Global Brand</span>
                         </div>
                         <div class="aspect-[3/4] overflow-hidden glass-card">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/sujan_2.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
+                            <img src="sujan_2.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- JEWELRY SHOWCASE (CAROUSEL) -->
         <section id="collections" class="py-32 px-0 relative bg-[#080808]">
             <div class="container mx-auto px-6 mb-12">
                 <div class="flex flex-col md:flex-row justify-between items-end">
@@ -346,7 +322,6 @@
                         <h2 class="font-serif text-4xl md:text-6xl text-white">Curated Brilliance</h2>
                     </div>
                     
-                    <!-- Carousel Controls -->
                     <div class="flex gap-4 mt-6 md:mt-0">
                          <button onclick="scrollCarousel('left')" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition hover-trigger text-white">
                              <i class="fas fa-arrow-left"></i>
@@ -358,14 +333,12 @@
                 </div>
             </div>
 
-            <!-- Scroll Container -->
             <div class="relative w-full">
                 <div id="carousel-track" class="flex overflow-x-auto gap-8 px-6 md:px-20 no-scrollbar snap-x snap-mandatory" style="scroll-behavior: smooth;">
                     
-                    <!-- 1. BRACELET -->
                     <a href="https://luvmyjewelry.com/collections/womens-bracelets" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
                         <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/bracelet.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Bracelet">
+                            <img src="bracelet.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Bracelet">
                             <div class="absolute top-4 right-4 bg-white/10 backdrop-blur px-2 py-1 text-[10px] uppercase text-white tracking-widest">New</div>
                         </div>
                         <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
@@ -374,10 +347,9 @@
                         </div>
                     </a>
 
-                    <!-- 2. RING -->
                     <a href="https://luvmyjewelry.com/collections/womens-rings" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
                         <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/ring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Ring">
+                            <img src="ring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Ring">
                         </div>
                         <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
                             <h3 class="font-serif text-3xl text-white italic">Rings</h3>
@@ -385,10 +357,9 @@
                         </div>
                     </a>
 
-                    <!-- 3. PENDANT -->
                     <a href="https://luvmyjewelry.com/collections/womens-diamond-and-gemstone-pendants-and-necklaces" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
                         <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/pendant.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Pendant">
+                            <img src="pendant.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Pendant">
                         </div>
                         <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
                             <h3 class="font-serif text-3xl text-white italic">Necklaces</h3>
@@ -396,10 +367,9 @@
                         </div>
                     </a>
 
-                    <!-- 4. EARRING -->
                     <a href="https://luvmyjewelry.com/collections/womens-earrings" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
                         <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="https://raw.githubusercontent.com/moonilicious/sujandoshi/refs/heads/main/earring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Earring">
+                            <img src="earring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Earring">
                         </div>
                         <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
                             <h3 class="font-serif text-3xl text-white italic">Earrings</h3>
@@ -411,15 +381,15 @@
             </div>
         </section>
 
-        <!-- TRAJECTORY (Horizontal Scroll) -->
         <section id="trajectory" class="relative overflow-hidden h-screen bg-brand-dark">
             <div class="scroll-container h-full w-full">
                 <div class="horizontal-section" id="horizontal-wrapper">
                     
-                    <!-- Intro Card -->
                     <div class="panel bg-black relative">
-                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
-                        <div class="text-center z-10 px-4"> <h2 class="font-display text-4xl sm:text-6xl md:text-9xl text-white mix-blend-difference mb-4">
+                        <div class="absolute inset-0 bg-[url('cubes.png')] opacity-5"></div>
+                        
+                        <div class="text-center z-10 px-4">
+                            <h2 class="font-display text-4xl sm:text-6xl md:text-9xl text-white mix-blend-difference mb-4">
                                 THE<br>CHRONICLE
                             </h2>
                             
@@ -432,7 +402,6 @@
                         </div>
                     </div>
 
-                    <!-- Stage 1: Deloitte -->
                     <div class="panel relative overflow-hidden group">
                         <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-black z-0"></div>
                         <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-gray-700">
@@ -445,7 +414,6 @@
                         </div>
                     </div>
 
-                    <!-- Stage 2: DE Shaw -->
                     <div class="panel relative overflow-hidden group">
                         <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-black z-0"></div>
                         <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-gray-500">
@@ -458,7 +426,6 @@
                         </div>
                     </div>
 
-                    <!-- Stage 3: LMJ -->
                     <div class="panel relative overflow-hidden group">
                         <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/10 to-black z-0"></div>
                         <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-brand-accent">
@@ -476,7 +443,6 @@
             </div>
         </section>
 
-        <!-- CONTACT -->
         <section id="contact" class="min-h-screen flex items-center justify-center relative bg-gradient-to-b from-black to-[#0a0a0a] px-6">
             <div class="glass-panel p-10 md:p-24 max-w-5xl w-full text-center relative z-10 border-t border-brand-accent/20 rounded-none">
                 <span class="text-brand-accent text-xs tracking-[0.3em] uppercase block mb-10">Initiate Dialogue</span>
