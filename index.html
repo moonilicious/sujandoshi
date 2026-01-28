@@ -1,638 +1,366 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sujan Doshi | Founder & CEO</title>
+    <title>Sujan Doshi</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Outfit:wght@200;300;400;500;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        brand: {
-                            accent: '#AEBEB0', // Sage Green (Primary Accent)
-                            light: '#E6EBE7',  // Lighter Sage for gradients
-                            dark: '#050505',
-                            glass: 'rgba(255, 255, 255, 0.03)',
-                            glassBorder: 'rgba(255, 255, 255, 0.08)',
-                        }
-                    },
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        serif: ['Cormorant Garamond', 'serif'],
-                        display: ['Syncopate', 'sans-serif'],
+                        sans: ['DM Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
                     },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                    },
-                    screens: {
-                        'xs': '375px',
-                        'sm': '640px',
-                        'md': '768px',
-                        'lg': '1024px',
-                        'xl': '1280px',
+                    colors: {
+                        background: '#fdfbf7', // Warm off-white (Eggshell)
+                        ink: '#1a1a1a',        // Soft Black
+                        subtle: '#666666',
+                        accent: '#aebeb0',     // User provided sage green
                     }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            margin: 0;
-            overflow-x: hidden;
-            background-color: #050505;
-            color: #f4f4f5;
-            cursor: none; /* Custom cursor */
+            background-color: #fdfbf7;
+            color: #1a1a1a;
         }
-
-        /* Noise Texture */
-        .noise-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 90;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-            opacity: 0.04;
-        }
-
-        #webgl-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Glassmorphism */
-        .glass-panel {
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-        
-        .glass-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        .glass-card:hover {
-            border-color: #AEBEB0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -10px rgba(174, 190, 176, 0.15);
-        }
-
-        /* Typography */
-        .text-glow { text-shadow: 0 0 30px rgba(174, 190, 176, 0.4); }
-        .text-stroke { -webkit-text-stroke: 1px rgb(255, 255, 255); color: transparent; }
-        
-        /* Loader */
-        #loader {
-            position: fixed; inset: 0; background: #050505; z-index: 100;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 1s ease-out;
-        }
-        .loader-text {
-            font-family: 'Syncopate', sans-serif; font-weight: 700; letter-spacing: 0.5em;
-            color: #AEBEB0; animation: pulse 2s infinite;
-        }
-        
-        /* --- NEW CURSOR: Luxury Reticle --- */
-        .cursor-dot {
-            width: 6px; height: 6px; background: #AEBEB0; position: fixed; top: 0; left: 0; 
-            border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
-        .cursor-ring {
-            width: 40px; height: 40px; border: 1px solid rgba(174, 190, 176, 0.4); position: fixed; top: 0; left: 0; 
-            border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
-            mix-blend-mode: difference;
-        }
-        body.hover-active .cursor-ring {
-            width: 70px; height: 70px; 
-            background-color: rgba(174, 190, 176, 0.1); 
-            border-color: #AEBEB0;
-            backdrop-filter: blur(2px);
-        }
-        @media (hover: none) {
-            .cursor-dot, .cursor-ring { display: none; }
-            body { cursor: auto; }
-        }
-
-        /* Horizontal Scroll Section (Trajectory) */
-        .horizontal-section {
-            width: 400%; /* 4 panels */
-            height: 100vh;
-            display: flex;
-            flex-wrap: nowrap;
-        }
-        .panel {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* Elegant underline animation for links */
+        .link-hover {
             position: relative;
-            padding: 2rem;
-            border-right: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none;
+            color: inherit;
+        }
+        .link-hover::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: currentColor;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .link-hover:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
         }
 
-        /* Carousel Scrollbar Hide */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        /* --- Animated Hamburger CSS --- */
+        .hamburger-button {
+            width: 24px;
+            height: 20px;
+            position: relative;
+            transform: rotate(0deg);
+            transition: .5s ease-in-out;
+            cursor: pointer;
+            z-index: 60; /* Higher than menu overlay */
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-
-        /* Animations */
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
         
-        /* Lens Flare */
-        .flare-img-container { position: relative; overflow: hidden; }
-        .flare-img-container::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-            transform: skewX(-25deg); transition: 0.5s; z-index: 2; pointer-events: none;
+        .hamburger-button span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 9px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: .25s ease-in-out;
         }
-        .flare-img-container:hover::before { left: 150%; transition: 0.7s; }
 
-        /* Reveal Animations */
-        .hero-anim { transition: all 1s ease-out; }
+        .hamburger-button span:nth-child(1) { top: 0px; }
+        .hamburger-button span:nth-child(2) { top: 9px; }
+        .hamburger-button span:nth-child(3) { top: 18px; }
+
+        .hamburger-button.open span:nth-child(1) {
+            top: 9px;
+            transform: rotate(135deg);
+        }
+
+        .hamburger-button.open span:nth-child(2) {
+            opacity: 0;
+            left: -60px;
+        }
+
+        .hamburger-button.open span:nth-child(3) {
+            top: 9px;
+            transform: rotate(-135deg);
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased font-sans selection:bg-accent selection:text-ink">
 
-    <div class="noise-overlay"></div>
+    <!-- Top Navigation Bar -->
+    <nav id="main-nav" class="fixed top-0 left-0 w-full bg-[#fdfbf7]/95 backdrop-blur-md z-50 border-b border-gray-100/50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="#" class="font-serif text-2xl font-bold tracking-tight z-50 relative">S.D.</a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-subtle">
+                <a href="#about" class="hover:text-ink transition-colors link-hover">About</a>
+                <a href="#work" class="hover:text-ink transition-colors link-hover">Work</a>
+                <a href="#philosophy" class="hover:text-ink transition-colors link-hover">Philosophy</a>
+                <a href="#contact" class="hover:text-ink transition-colors link-hover">Contact</a>
+                
+                <div class="h-4 w-px bg-gray-300 mx-2"></div>
+                
+                <!-- Social Icons Desktop -->
+                <div class="flex space-x-4">
+                    <a href="#contact" onclick="copyAndScroll(event)" class="hover:text-ink transition-colors" title="Copy email & scroll to contact"><i data-lucide="mail" class="w-4 h-4"></i></a>
+                    <a href="https://www.linkedin.com/in/sujandoshi" target="_blank" class="hover:text-ink transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                </div>
+            </div>
 
-    <div id="cursor-dot" class="cursor-dot hidden md:block"></div>
-    <div id="cursor-ring" class="cursor-ring hidden md:block"></div>
-
-    <canvas id="webgl-container"></canvas>
-
-    <div id="loader">
-        <div class="loader-text">SUJAN DOSHI</div>
-        <div class="mt-4 text-xs font-sans tracking-widest text-gray-500">DIGITAL FLAGSHIP</div>
-    </div>
-
-    <nav class="fixed top-0 w-full z-50 px-6 py-6 md:px-12 md:py-8 flex justify-between items-center mix-blend-difference">
-        <a href="#" class="text-xl font-display tracking-widest text-white hover-trigger">SD.</a>
-        <div class="hidden md:flex gap-10 text-[11px] tracking-[0.2em] font-medium text-gray-400">
-            <a href="#about" class="hover:text-brand-accent transition hover-trigger">PROFILE</a>
-            <a href="#collections" class="hover:text-brand-accent transition hover-trigger">COLLECTIONS</a>
-            <a href="#trajectory" class="hover:text-brand-accent transition hover-trigger">CHRONICLE</a>
-            <a href="#contact" class="hover:text-brand-accent transition hover-trigger">CONTACT</a>
+            <!-- Mobile Menu Button (Animated) -->
+            <div class="md:hidden z-50 relative p-2" onclick="toggleMenu()">
+                <div id="hamburger" class="hamburger-button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
         </div>
-        <a href="https://luvmyjewelry.com" target="_blank" class="hidden md:flex items-center gap-2 px-6 py-2 border border-white/20 text-[10px] uppercase tracking-widest rounded-full hover:bg-white hover:text-black transition duration-300 hover-trigger">
-            LMJ Official <i class="fas fa-external-link-alt text-[8px]"></i>
-        </a>
-        <button class="md:hidden text-white text-xl hover-trigger" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-accent z-40 transform translate-x-full transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) md:hidden flex flex-col justify-start items-center pt-32 space-y-8 h-screen w-screen">
+            <a href="#about" onclick="toggleMenu()" class="text-4xl font-serif font-medium text-ink hover:opacity-70 transform transition-transform duration-300">About</a>
+            <a href="#work" onclick="toggleMenu()" class="text-4xl font-serif font-medium text-ink hover:opacity-70 transform transition-transform duration-300">Work</a>
+            <a href="#philosophy" onclick="toggleMenu()" class="text-4xl font-serif font-medium text-ink hover:opacity-70 transform transition-transform duration-300">Philosophy</a>
+            <a href="#contact" onclick="toggleMenu()" class="text-4xl font-serif font-medium text-ink hover:opacity-70 transform transition-transform duration-300">Contact</a>
+            
+            <div class="flex space-x-8 mt-12 pt-8 border-t border-ink/10 w-48 justify-center">
+                <a href="#contact" onclick="copyAndScroll(event); toggleMenu()" class="text-ink hover:opacity-70"><i data-lucide="mail" class="w-8 h-8"></i></a>
+                <a href="https://www.linkedin.com/in/sujandoshi" target="_blank" class="text-ink hover:opacity-70"><i data-lucide="linkedin" class="w-8 h-8"></i></a>
+            </div>
+        </div>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-brand-dark/95 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-500 flex flex-col justify-center items-center">
-        <div class="flex flex-col gap-8 text-center">
-            <a href="#about" onclick="toggleMobileMenu()" class="text-2xl font-display text-white hover:text-brand-accent transition">PROFILE</a>
-            <a href="#collections" onclick="toggleMobileMenu()" class="text-2xl font-display text-white hover:text-brand-accent transition">COLLECTIONS</a>
-            <a href="#trajectory" onclick="toggleMobileMenu()" class="text-2xl font-display text-white hover:text-brand-accent transition">CHRONICLE</a>
-            <a href="#contact" onclick="toggleMenuMobileMenu()" class="text-2xl font-display text-white hover:text-brand-accent transition">CONTACT</a>
-            <a href="https://luvmyjewelry.com" target="_blank" class="mt-4 px-8 py-3 border border-white/20 text-white text-xs tracking-widest uppercase">LMJ OFFICIAL</a>
-        </div>
-    </div>
-
-    <main>
-
-        <section id="hero" class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
-            <div class="container mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center h-full pt-[100px] md:pt-32 pb-20">
-                
-                <div class="md:col-span-7 relative z-20 order-2 md:order-1">
-                    <div class="overflow-hidden mb-4">
-                        <span class="inline-block text-brand-accent text-xs tracking-[0.3em] uppercase hero-anim opacity-0 translate-y-10">
-                            Founder & CEO • LuvMyJewelry
-                        </span>
-                    </div>
-                    
-                    <h1 class="font-display text-5xl md:text-8xl lg:text-9xl leading-[0.9] text-white mb-8 mix-blend-overlay">
-                        <span class="block overflow-hidden"><span class="hero-anim block translate-y-full">SUJAN</span></span>
-                        <span class="block overflow-hidden"><span class="hero-anim block translate-y-full text-stroke">DOSHI</span></span>
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-6 pt-32 pb-24">
+        
+        <!-- Hero / Intro -->
+        <section id="about" class="mb-24 md:mb-32 animate-fade-in">
+            <div class="flex flex-col-reverse md:flex-row md:items-start md:justify-between gap-12 md:gap-24">
+                <div class="flex-1">
+                    <span class="block text-xs font-bold tracking-[0.2em] uppercase text-subtle mb-6">Founder & CEO</span>
+                    <h1 class="font-serif text-5xl md:text-7xl leading-[1.1] mb-8 text-ink">
+                        Hi, I’m <br>Sujan Doshi.
                     </h1>
-                    
-                    <p class="font-sans font-light text-gray-400 text-sm md:text-lg max-w-md leading-relaxed mb-10 hero-anim opacity-0 translate-y-10 border-l border-brand-accent pl-6">
-                        Building enduring consumer brands through clarity, consistency, and trust. Redefining the intersection of luxury and accessibility.
+                    <p class="text-xl md:text-2xl font-serif text-subtle leading-relaxed max-w-2xl italic">
+                        Building enduring consumer brands with a focus on product, operations, and customer trust. Currently at <a href="https://luvmyjewelry.com/" target="_blank" class="text-ink underline decoration-accent decoration-2 underline-offset-4 hover:bg-accent/20 transition-all">LuvMyJewelry</a>.
                     </p>
-                    
-                    <div class="flex flex-wrap gap-6 hero-anim opacity-0 translate-y-10">
-                        <a href="#contact" class="hover-trigger relative px-8 py-3 bg-brand-accent text-brand-dark font-sans text-xs font-bold tracking-[0.2em] uppercase overflow-hidden group rounded-sm">
-                            <span class="relative z-10 group-hover:text-white transition-colors duration-300">Connect</span>
-                            <div class="absolute inset-0 bg-brand-dark transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                        </a>
-                        <a href="#collections" class="hover-trigger px-8 py-3 border border-white/20 text-white font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-white/5 transition duration-300 rounded-sm">
-                            View Work
-                        </a>
-                    </div>
                 </div>
-
-                <div class="md:col-span-5 relative h-[50vh] md:h-[70vh] w-full flex justify-center items-center order-1 md:order-2 hero-image-anim opacity-0 scale-95">
-                    <div class="relative w-full h-full max-w-sm">
-                        <div class="absolute inset-0 rounded-full border border-brand-accent/20 animate-[spin_10s_linear_infinite]"></div>
-                        <div class="absolute -inset-4 rounded-full border border-white/5 animate-[spin_15s_linear_infinite_reverse]"></div>
-
-                        <div class="absolute inset-0 rounded-[10rem] overflow-hidden glass-panel border border-white/10 group">
-                             <img src="sujan_4.jpeg" 
-                                  alt="Sujan Doshi" 
-                                  class="w-full h-full object-cover transition duration-1000 group-hover:scale-105 filter contrast-110">
-                             
-                             <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent"></div>
-                             
-                             <div class="absolute bottom-8 left-0 w-full text-center">
-                                 <span class="font-display text-white text-2xl tracking-widest drop-shadow-lg">SD</span>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            
-        </section>
-
-        <section id="about" class="py-32 px-6 relative z-10 bg-brand-dark">
-            <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <div class="order-2 lg:order-1">
-                    <span class="text-brand-accent text-xs tracking-[0.3em] uppercase block mb-6 scroll-reveal">The Vision</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-white mb-10 leading-tight scroll-reveal">
-                        "We aren't just selling jewelry. We are engineering <span class="italic text-brand-accent">moments of connection</span>."
-                    </h2>
-                    
-                    <div class="space-y-8 text-gray-400 font-light text-lg leading-relaxed">
-                        <p class="scroll-reveal glass-card p-8 rounded-none border-l-2 border-brand-accent">
-                            I’m <strong class="text-white">Sujan Doshi</strong>. My journey began in the high-stakes worlds of <strong>Deloitte Consulting</strong> and <strong>D.E. Shaw & Co.</strong>, where I learned that discipline and data are the bedrock of success.
-                        </p>
-                        <p class="scroll-reveal">
-                            Now, I apply those same principles to <span class="text-white">LuvMyJewelry (LMJ)</span>. We are building a modern brand designed to be the trusted, everyday destination for accessible, high-quality craftsmanship.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="order-1 lg:order-2 grid grid-cols-2 gap-4 h-min self-center scroll-reveal">
-                    <div class="space-y-4 mt-12">
-                        <div class="aspect-[3/4] overflow-hidden glass-card">
-                            <img src="sujan_1.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
-                        </div>
-                        <div class="p-6 glass-card text-center">
-                            <span class="font-display text-3xl text-brand-accent">10+</span>
-                            <span class="block text-[10px] text-gray-500 tracking-widest uppercase mt-2">Years Experience</span>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="p-6 glass-card text-center">
-                            <span class="font-display text-3xl text-brand-accent">LMJ</span>
-                            <span class="block text-[10px] text-gray-500 tracking-widest uppercase mt-2">Global Brand</span>
-                        </div>
-                        <div class="aspect-[3/4] overflow-hidden glass-card">
-                            <img src="sujan_2.jpeg" class="w-full h-full object-cover hover:scale-110 transition duration-1000 grayscale hover:grayscale-0">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="collections" class="py-32 px-0 relative bg-[#080808]">
-            <div class="container mx-auto px-6 mb-12">
-                <div class="flex flex-col md:flex-row justify-between items-end">
-                    <div>
-                        <span class="text-brand-accent text-xs tracking-[0.3em] uppercase block mb-4">The Collection</span>
-                        <h2 class="font-serif text-4xl md:text-6xl text-white">Curated Brilliance</h2>
-                    </div>
-                    
-                    <div class="flex gap-4 mt-6 md:mt-0">
-                         <button onclick="scrollCarousel('left')" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition hover-trigger text-white">
-                             <i class="fas fa-arrow-left"></i>
-                         </button>
-                         <button onclick="scrollCarousel('right')" class="w-12 h-12 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition hover-trigger text-white">
-                             <i class="fas fa-arrow-right"></i>
-                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative w-full">
-                <div id="carousel-track" class="flex overflow-x-auto gap-8 px-6 md:px-20 no-scrollbar snap-x snap-mandatory" style="scroll-behavior: smooth;">
-                    
-                    <a href="https://luvmyjewelry.com/collections/womens-bracelets" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
-                        <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="bracelet.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Bracelet">
-                            <div class="absolute top-4 right-4 bg-white/10 backdrop-blur px-2 py-1 text-[10px] uppercase text-white tracking-widest">New</div>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
-                            <h3 class="font-serif text-3xl text-white italic">Bracelets</h3>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-white transition">Explore</span>
-                        </div>
-                    </a>
-
-                    <a href="https://luvmyjewelry.com/collections/womens-rings" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
-                        <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="ring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Ring">
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
-                            <h3 class="font-serif text-3xl text-white italic">Rings</h3>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-white transition">Explore</span>
-                        </div>
-                    </a>
-
-                    <a href="https://luvmyjewelry.com/collections/womens-diamond-and-gemstone-pendants-and-necklaces" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
-                        <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="pendant.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Pendant">
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
-                            <h3 class="font-serif text-3xl text-white italic">Necklaces</h3>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-white transition">Explore</span>
-                        </div>
-                    </a>
-
-                    <a href="https://luvmyjewelry.com/collections/womens-earrings" target="_blank" class="group block hover-trigger min-w-[85vw] md:min-w-[400px] snap-center">
-                        <div class="flare-img-container aspect-[3/4] overflow-hidden bg-gray-900 relative mb-6 border border-white/5">
-                            <img src="earring.jpeg" class="w-full h-full object-cover transition duration-700 group-hover:scale-110" alt="Earring">
-                        </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-4 group-hover:border-brand-accent transition">
-                            <h3 class="font-serif text-3xl text-white italic">Earrings</h3>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-widest group-hover:text-white transition">Explore</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="trajectory" class="relative overflow-hidden h-screen bg-brand-dark">
-            <div class="scroll-container h-full w-full">
-                <div class="horizontal-section" id="horizontal-wrapper">
-                    
-                    <div class="panel bg-black relative">
-                        <div class="absolute inset-0 bg-[url('cubes.png')] opacity-5"></div>
-                        
-                        <div class="text-center z-10 px-4">
-                            <h2 class="font-display text-4xl sm:text-6xl md:text-9xl text-white mix-blend-difference mb-4">
-                                THE<br>CHRONICLE
-                            </h2>
-                            
-                            <p class="text-brand-accent tracking-[0.3em] md:tracking-[0.5em] text-xs md:text-sm uppercase">
-                                A Career of Compounding Decisions
-                            </p>
-                            <div class="mt-8 animate-pulse text-gray-500 text-[10px] md:text-xs tracking-widest">
-                                SCROLL RIGHT &rarr;
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-black z-0"></div>
-                        <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-gray-700">
-                            <span class="text-8xl font-display text-white/5 absolute -top-10 -right-10">01</span>
-                            <h3 class="text-4xl font-serif text-white mb-2">Deloitte Consulting</h3>
-                            <p class="text-xs text-brand-accent uppercase tracking-widest mb-8">Strategy & Operations</p>
-                            <p class="text-gray-400 font-light leading-relaxed text-lg">
-                                Where I learned the art of problem-solving at scale. Advising Fortune 500 clients sharpened my ability to see the signal in the noise.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="panel relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-black z-0"></div>
-                        <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-gray-500">
-                            <span class="text-8xl font-display text-white/5 absolute -top-10 -right-10">02</span>
-                            <h3 class="text-4xl font-serif text-white mb-2">D.E. Shaw & Co.</h3>
-                            <p class="text-xs text-brand-accent uppercase tracking-widest mb-8">Finance & Discipline</p>
-                            <p class="text-gray-400 font-light leading-relaxed text-lg">
-                                A masterclass in risk management and execution. Working at a top-tier hedge fund taught me that details aren't just details—they are the strategy.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="panel relative overflow-hidden group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-brand-accent/10 to-black z-0"></div>
-                        <div class="glass-card p-12 max-w-xl relative z-10 hover-trigger border-t-4 border-t-brand-accent">
-                            <span class="text-8xl font-display text-brand-accent/10 absolute -top-10 -right-10">03</span>
-                            <h3 class="text-4xl font-serif text-white mb-2">LuvMyJewelry</h3>
-                            <p class="text-xs text-brand-accent uppercase tracking-widest mb-8">Founder & CEO</p>
-                            <p class="text-gray-400 font-light leading-relaxed text-lg">
-                                Bridging the gap. Building a brand that respects the heritage of jewelry making while embracing the speed of modern commerce.
-                            </p>
-                            <a href="https://luvmyjewelry.com" class="inline-block mt-8 text-white border-b border-brand-accent pb-1 text-xs uppercase tracking-widest hover:text-brand-accent transition">Visit Digital Store</a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="min-h-screen flex items-center justify-center relative bg-gradient-to-b from-black to-[#0a0a0a] px-6">
-            <div class="glass-panel p-10 md:p-24 max-w-5xl w-full text-center relative z-10 border-t border-brand-accent/20 rounded-none">
-                <span class="text-brand-accent text-xs tracking-[0.3em] uppercase block mb-10">Initiate Dialogue</span>
-                <h2 class="font-serif text-5xl md:text-7xl text-white mb-12 italic leading-tight">
-                    Let's build the <br> <span class="text-gray-500 not-italic">next chapter.</span>
-                </h2>
                 
-                <p class="text-gray-400 font-light mb-16 max-w-xl mx-auto text-lg">
-                    If you’re an investor, founder, operator, or partner interested in consumer brands, retail, or commerce, I’m always open to a thoughtful conversation.
-                </p>
-
-                <div class="flex flex-col sm:flex-row justify-center gap-6">
-                    <button onclick="navigator.clipboard.writeText('sujan@luvmyjewelry.com')" class="group relative px-10 py-5 bg-white text-black font-sans text-xs font-bold tracking-[0.2em] uppercase overflow-hidden hover-trigger">
-                        <span class="relative z-10 group-hover:text-white transition-colors">Copy Email</span>
-                        <div class="absolute inset-0 bg-brand-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-bottom"></div>
-                    </button>
-                    <a href="https://www.linkedin.com/in/sujandoshi" target="_blank" class="px-10 py-5 border border-white/20 text-white font-sans text-xs font-bold tracking-[0.2em] uppercase hover:bg-white/5 transition duration-300 hover-trigger">
-                        LinkedIn Profile
-                    </a>
+                <!-- Portrait Image -->
+                <div class="w-full md:w-80 flex-shrink-0">
+                        <img src="sujan_4.jpeg" alt="Sujan Doshi" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700 ease-in-out rounded-sm shadow-sm object-cover aspect-[3/4]">
                 </div>
             </div>
-            
-            <div class="absolute bottom-10 w-full text-center text-[10px] text-gray-600 uppercase tracking-widest">
-                &copy; 2026 Sujan Doshi. All Rights Reserved.
+        </section>
+
+        <!-- Separator -->
+        <hr class="border-gray-200 mb-20">
+
+        <!-- Work Section -->
+        <section id="work" class="mb-24 scroll-mt-32">
+            <div class="grid md:grid-cols-12 gap-8">
+                <div class="md:col-span-3">
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-subtle sticky top-32">Current Focus</h2>
+                </div>
+                <div class="md:col-span-9">
+                    <article class="group">
+                        <div class="flex justify-between items-baseline mb-4">
+                            <h3 class="font-serif text-3xl md:text-4xl text-ink group-hover:underline decoration-accent decoration-2 underline-offset-4 transition-all">
+                                <a href="https://luvmyjewelry.com/" target="_blank">LuvMyJewelry (LMJ)</a>
+                            </h3>
+                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-subtle opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        </div>
+                        <p class="text-lg text-subtle leading-relaxed mb-6">
+                            A modern jewelry brand built to become a trusted, everyday destination for accessible, high-quality jewelry. Today, LMJ partners with select retailers while continuing to grow its direct-to-consumer presence.
+                        </p>
+                        <p class="text-lg text-subtle leading-relaxed">
+                            Our focus is on building a brand that operates consistently at scale and delivers a strong, dependable customer experience.
+                        </p>
+                    </article>
+                </div>
             </div>
         </section>
+
+        <!-- Separator -->
+        <hr class="border-gray-200 mb-20">
+
+        <!-- Philosophy Section -->
+        <section id="philosophy" class="mb-24 scroll-mt-32">
+            <div class="grid md:grid-cols-12 gap-8">
+                <div class="md:col-span-3">
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-subtle sticky top-32">Philosophy</h2>
+                </div>
+                <div class="md:col-span-9 space-y-12">
+                    <div>
+                        <p class="font-serif text-2xl md:text-3xl text-ink leading-tight mb-8 pl-6 border-l-4 border-accent">
+                            "I care deeply about clarity, consistency, and making decisions that compound over the long term."
+                        </p>
+                        <p class="text-lg text-subtle leading-relaxed">
+                            I spend most of my time thinking about how enduring consumer brands are built, from product and operations to distribution and customer trust.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-serif text-2xl text-ink mb-4">Background</h3>
+                        <p class="text-lg text-subtle leading-relaxed mb-6">
+                            Earlier in my career, I worked in consulting at <span class="font-medium text-ink">Deloitte Consulting</span> and in finance at <span class="font-medium text-ink">D.E. Shaw & Co.</span>
+                        </p>
+                        <p class="text-lg text-subtle leading-relaxed">
+                            Those experiences continue to shape how I approach problem-solving, decision-making, and disciplined execution.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Separator -->
+        <hr class="border-gray-200 mb-20">
+
+        <!-- Personal Section -->
+        <section id="personal" class="mb-24 scroll-mt-32">
+            <div class="grid md:grid-cols-12 gap-8">
+                <div class="md:col-span-3">
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-subtle sticky top-32">Personal</h2>
+                </div>
+                <div class="md:col-span-9">
+                    <p class="text-lg text-subtle leading-relaxed mb-8">
+                        Outside of work, you can usually find me running in Central Park, reading a good mystery or suspense novel, or unwinding over a cup of coffee at the latest coffee shop in town.
+                    </p>
+                    <p class="text-lg text-subtle leading-relaxed">
+                        Most importantly, I love spending time with my wife, daughter, and family. They are a constant reminder of what matters most.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="scroll-mt-32 bg-accent/20 p-10 md:p-16 rounded-sm">
+            <h2 class="font-serif text-4xl mb-6">Want to connect?</h2>
+            <p class="text-lg text-ink/80 mb-10 max-w-2xl">
+                If you’re an investor, founder, operator, or partner interested in consumer brands, retail, or commerce, I’m always open to a thoughtful conversation.
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-6">
+                <a href="#" onclick="copyEmail(event)" class="inline-flex items-center text-lg font-medium text-ink border-b border-black pb-1 hover:text-subtle hover:border-subtle transition-colors w-max cursor-pointer group" title="Click to copy email">
+                    sujan@luvmyjewelry.com
+                    <i data-lucide="copy" class="ml-2 w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/sujandoshi" target="_blank" class="inline-flex items-center text-lg font-medium text-ink border-b border-black pb-1 hover:text-subtle hover:border-subtle transition-colors w-max">
+                    LinkedIn
+                    <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                </a>
+            </div>
+        </section>
+        
+        <footer class="text-sm text-subtle pt-12 mt-12 border-t border-gray-200 flex justify-between items-center">
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> Sujan Doshi.</p>
+            <a href="#" class="text-subtle hover:text-ink transition-colors" onclick="window.scrollTo(0,0)">Back to Top &uarr;</a>
+        </footer>
 
     </main>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-ink text-white px-6 py-3 rounded-md shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 font-medium flex items-center gap-2 pointer-events-none">
+        <i data-lucide="check" class="w-4 h-4 text-accent"></i>
+        Email copied to clipboard!
+    </div>
 
     <script>
-        // --- MOBILE MENU ---
-        function toggleMobileMenu() {
+        lucide.createIcons();
+
+        function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            const isOpen = !menu.classList.contains('translate-x-full');
+            const hamburger = document.getElementById('hamburger');
+            const nav = document.getElementById('main-nav');
+            const body = document.body;
+            
+            const isOpen = hamburger.classList.contains('open');
             
             if (isOpen) {
+                // Close
                 menu.classList.add('translate-x-full');
-                document.body.style.overflow = '';
+                hamburger.classList.remove('open');
+                body.style.overflow = ''; // Restore scrolling
+                
+                // Revert Nav Styles
+                nav.classList.remove('!bg-transparent', '!border-transparent', '!backdrop-blur-none');
+                nav.classList.add('bg-[#fdfbf7]/95', 'backdrop-blur-md', 'border-gray-100/50');
+                
             } else {
+                // Open
                 menu.classList.remove('translate-x-full');
-                document.body.style.overflow = 'hidden';
+                hamburger.classList.add('open');
+                body.style.overflow = 'hidden'; // Prevent background scrolling
+                
+                // Make Nav Transparent
+                nav.classList.add('!bg-transparent', '!border-transparent', '!backdrop-blur-none');
+                nav.classList.remove('bg-[#fdfbf7]/95', 'backdrop-blur-md', 'border-gray-100/50');
             }
         }
 
-        // --- CAROUSEL LOGIC ---
-        function scrollCarousel(direction) {
-            const track = document.getElementById('carousel-track');
-            const itemWidth = track.firstElementChild.offsetWidth;
-            const gap = 32; // gap-8 = 32px
-            const scrollAmount = direction === 'left' ? -(itemWidth + gap) : (itemWidth + gap);
-            track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        function copyEmail(event) {
+            event.preventDefault();
+            const email = "sujan@luvmyjewelry.com";
+            
+            // Create temporary element to copy from
+            const textArea = document.createElement("textarea");
+            textArea.value = email;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
         }
 
-        // --- THREE.JS BACKGROUND (Diamond Dust) ---
-        const initThree = () => {
-            const container = document.getElementById('webgl-container');
-            const scene = new THREE.Scene();
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2000);
+        }
+
+        function copyAndScroll(event) {
+            // Reuse copy logic (which prevents default)
+            copyEmail(event);
             
-            // Fog for depth
-            scene.fog = new THREE.FogExp2(0x050505, 0.002);
-
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 30;
-
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer.domElement);
-
-            // Particles
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 1500;
-            const posArray = new Float32Array(particlesCount * 3);
-
-            for(let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 60;
+            // Scroll to the contact section
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
             }
-
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            
-            const material = new THREE.PointsMaterial({
-                size: 0.05,
-                color: 0xAEBEB0, // Updated to Sage Green
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
-            });
-
-            const particlesMesh = new THREE.Points(particlesGeometry, material);
-            scene.add(particlesMesh);
-
-            // Interaction
-            let mouseX = 0;
-            let mouseY = 0;
-            let targetX = 0;
-            let targetY = 0;
-
-            const windowHalfX = window.innerWidth / 2;
-            const windowHalfY = window.innerHeight / 2;
-
-            document.addEventListener('mousemove', (event) => {
-                mouseX = event.clientX / window.innerWidth - 0.5;
-                mouseY = event.clientY / window.innerHeight - 0.5;
-            });
-
-            // Loop
-            const clock = new THREE.Clock();
-
-            const tick = () => {
-                const elapsedTime = clock.getElapsedTime();
-
-                targetX = mouseX * 0.001;
-                targetY = mouseY * 0.001;
-
-                particlesMesh.rotation.y = .05 * elapsedTime;
-                particlesMesh.rotation.x += .02 * (targetY - particlesMesh.rotation.x);
-                particlesMesh.rotation.y += .02 * (targetX - particlesMesh.rotation.y);
-
-                renderer.render(scene, camera);
-                requestAnimationFrame(tick);
-            }
-
-            tick();
-
-            // Resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        };
-
-        // --- LOADER & ANIMATION ---
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-            
-            tl.to("#loader-bar", { width: "100%", duration: 1.5, ease: "power2.inOut" })
-            .to("#loader", { y: "-100%", duration: 1.2, ease: "expo.inOut", delay: 0.5 })
-            .to(".hero-anim", { y: 0, opacity: 1, duration: 1.5, stagger: 0.1, ease: "power3.out" }, "-=0.5")
-            .to(".hero-image-anim", { scale: 1, opacity: 1, duration: 1.5, ease: "power2.out" }, "-=1.2");
-            
-            initThree();
-        });
-
-        // --- CURSOR ---
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorRing = document.getElementById('cursor-ring');
-        const triggers = document.querySelectorAll('.hover-trigger');
-
-        window.addEventListener('mousemove', (e) => {
-            gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-            gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.3 });
-        });
-
-        triggers.forEach(trigger => {
-            trigger.addEventListener('mouseenter', () => {
-                document.body.classList.add('hover-active');
-                gsap.to(cursorRing, { scale: 1.5, borderColor: "transparent", backgroundColor: "rgba(174,190,176,0.1)", duration: 0.3 });
-            });
-            trigger.addEventListener('mouseleave', () => {
-                document.body.classList.remove('hover-active');
-                gsap.to(cursorRing, { scale: 1, borderColor: "rgba(174,190,176,0.5)", backgroundColor: "transparent", duration: 0.3 });
-            });
-        });
-
-        // --- HORIZONTAL SCROLL (TRAJECTORY) ---
-        gsap.registerPlugin(ScrollTrigger);
-
-        const sections = gsap.utils.toArray(".panel");
-        
-        gsap.to(sections, {
-            xPercent: -100 * (sections.length - 1),
-            ease: "none",
-            scrollTrigger: {
-                trigger: "#trajectory",
-                pin: true,
-                scrub: 1,
-                snap: 1 / (sections.length - 1),
-                end: () => "+=" + document.querySelector("#trajectory").offsetWidth
-            }
-        });
-        
-        // --- SCROLL REVEALS ---
-        gsap.utils.toArray('.scroll-reveal').forEach(element => {
-            gsap.fromTo(element, 
-                { opacity: 0, y: 50 },
-                { opacity: 1, y: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: element, start: 'top 85%' } }
-            );
-        });
-
+        }
     </script>
 </body>
 </html>
